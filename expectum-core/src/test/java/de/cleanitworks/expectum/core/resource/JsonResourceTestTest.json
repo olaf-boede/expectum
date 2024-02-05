@@ -1,0 +1,28 @@
+{
+  "json_simpleNode": {
+    "simpleNode": "abc"
+  },
+  "testBean": {
+    "expected": {
+      "string": "string value",
+      "localDate": "2020-07-01",
+      "primitiveBoolean": false,
+      "itemList": [
+        {
+          "name": "item name"
+        }
+      ]
+    }
+  },
+  "jsonHide": {
+    "expected": {
+      "string": "string value"
+    }
+  },
+  "jsonShow": {
+    "expected": {
+      "string": "string value",
+      "localDate": "2020-07-01"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "rootNode": {
+    "simpleNode": "simpleNode Content",
+    "arrayNode": [
+            "hello",
+            "world"
+      ]
+  }
+}
