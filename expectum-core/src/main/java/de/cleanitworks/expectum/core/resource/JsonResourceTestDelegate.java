@@ -88,6 +88,15 @@ public class JsonResourceTestDelegate {
     return json(testClassSupplier.get(), nodePtr);
   }
 
+  protected String hjson(String nodePtr) {
+    return hjson(testClassSupplier.get(), nodePtr);
+  }
+
+  protected String hjson(Class<?> ctxtClass, String nodePtr) {
+    var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
+    return JsonResourceTestUtil.hjsonData(ctxtClass, absolutePtr);
+  }
+
   /**
    * Similar to {@link #json(String)}, but with the ability to pass a specific class which is
    * used to get the related json file for.
@@ -98,13 +107,16 @@ public class JsonResourceTestDelegate {
    * @return the content string of the referenced node (unformatted json).
    */
   protected String json(Class<?> ctxtClass, String nodePtr) {
+    var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
+    return JsonResourceTestUtil.jsonData(ctxtClass, absolutePtr);
+  }
+
+  private String nodePtrToAbsolutePtr(Class<?> ctxtClass, String nodePtr) {
     var isAbsolutePtr = Objects.requireNonNull(nodePtr, "nodePtr should not be null.")
             .startsWith("/");
-    var absolutePtr = isAbsolutePtr
+    return isAbsolutePtr
             ? nodePtr
             : "/" + TestClassUtil.getTestMethodName(ctxtClass) + "/" + nodePtr;
-
-    return JsonResourceTestUtil.jsonData(ctxtClass, absolutePtr);
   }
 
   /**

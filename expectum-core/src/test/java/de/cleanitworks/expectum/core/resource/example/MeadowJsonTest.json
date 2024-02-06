@@ -1,0 +1,29 @@
+{
+  "simpleMeadow": {
+    "expected": {
+      "name": "Gulf meadow",
+      "description": "A green area.\nBut not helpful for nature.",
+      "created": "2020-07-01",
+      "plants": [
+        {
+          "name": "Grass"
+        }
+      ]
+    }
+  },
+  "simpleMeadow_hideDescriptionAndPlants": {
+    "expected": {
+      "name": "Gulf meadow",
+      "created": "2020-07-01"
+    }
+  },
+  "simpleMeadow_showOnlyPlants": {
+    "expected": {
+      "plants": [
+        {
+          "name": "Grass"
+        }
+      ]
+    }
+  }
+}

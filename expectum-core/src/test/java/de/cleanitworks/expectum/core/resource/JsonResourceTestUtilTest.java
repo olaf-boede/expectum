@@ -32,13 +32,13 @@ class JsonResourceTestUtilTest {
 
     @Test
     void hjsonData_simpleNode() {
-        assertThat(JsonResourceTestUtil.jsonData(getClass(), "/rootNode/simpleNode"))
+        assertThat(JsonResourceTestUtil.hjsonData(getClass(), "/rootNode/simpleNode"))
                 .isEqualTo("simpleNode Content");
     }
 
     @Test
     void hjsonData_arrayNode() {
-        assertThat(JsonResourceTestUtil.jsonData(getClass(), "/rootNode/arrayNode"))
+        assertThat(JsonResourceTestUtil.hjsonData(getClass(), "/rootNode/arrayNode"))
                 .isEqualTo("[\"hello\",\"world\"]");
     }
 

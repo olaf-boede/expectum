@@ -10,7 +10,7 @@ public abstract class JsonResourceTest {
   @Getter
   private final JsonResourceTestDelegate jsonDelegate = new JsonResourceTestDelegate(this::getClass);
 
-  String toJson(Object obj) {
+  protected String toJson(Object obj) {
     return jsonDelegate.toJson(obj);
   }
 
@@ -32,6 +32,15 @@ public abstract class JsonResourceTest {
    */
   protected String json(String nodePtr) {
     return jsonDelegate.json(nodePtr);
+  }
+
+  /**
+   * Similar to
+   * @param nodePtr
+   * @return
+   */
+  protected String hjson(String nodePtr) {
+    return jsonDelegate.hjson(nodePtr);
   }
 
   /**
