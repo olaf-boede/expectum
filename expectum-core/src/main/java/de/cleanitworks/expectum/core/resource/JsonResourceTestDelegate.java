@@ -5,10 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import de.cleanitworks.expectum.core.junit.TestClassUtil;
 
@@ -21,6 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value.forIgnoredProperties;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -29,26 +26,43 @@ import static java.util.stream.Collectors.toList;
  * It is designed to work as a delegate behind simple test classes or test base classes.
  * This way it might be usable in various scenarios.
  */
-@RequiredArgsConstructor
 public class JsonResourceTestDelegate {
 
   /**
-   * By default each concrete test class uses a corresponding json test data file having a similar
+   * By default, each concrete test class uses a corresponding json test data file having a similar
    * name (class-name.json) within the same test package.
    * The test class is used to evaluate that file name.
    */
-  @NonNull
   private final Supplier<Class<?>> testClassSupplier;
+
 
   /**
    * The object mapper defines the way, java objects get serialized to json.
    */
-  @Getter
-  @Setter
   private ObjectMapper objectMapper = JsonMapper.builder()
           .addModule(new JavaTimeModule())
           .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
           .build();
+
+  /**
+   * By default, each concrete test class uses a corresponding json test data file having a similar
+   * name (class-name.json) within the same test package.
+   * The test class is used to evaluate that file name.
+   *
+   * @param testClassSupplier provides the test class used for getting corresponding test data.
+   */
+  public JsonResourceTestDelegate(Supplier<Class<?>> testClassSupplier) {
+    this.testClassSupplier = requireNonNull(testClassSupplier);
+  }
+
+  public ObjectMapper getObjectMapper() {
+    return objectMapper;
+  }
+
+  public ObjectMapper setObjectMapper(ObjectMapper objectMapper) {
+    this.objectMapper = requireNonNull(objectMapper);
+    return this.objectMapper;
+  }
 
   /**
    * Serializes the given object to json.
@@ -130,7 +144,7 @@ public class JsonResourceTestDelegate {
   }
 
   private String nodePtrToAbsolutePtr(Class<?> ctxtClass, String nodePtr) {
-    var isAbsolutePtr = Objects.requireNonNull(nodePtr, "nodePtr should not be null.")
+    var isAbsolutePtr = requireNonNull(nodePtr, "nodePtr should not be null.")
             .startsWith("/");
     return isAbsolutePtr
             ? nodePtr

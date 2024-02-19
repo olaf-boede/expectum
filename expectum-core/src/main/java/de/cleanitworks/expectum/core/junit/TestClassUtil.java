@@ -1,14 +1,10 @@
 package de.cleanitworks.expectum.core.junit;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestClassUtil {
 
   private static final Set<String> TEST_ANNOTATIONS =

@@ -14,7 +14,7 @@ class Meadow {
     LocalDate created;
     List<Plant> plants;
 
-    static Meadow simple() {
+    static Meadow gulf() {
         return Meadow.builder()
                 .name("Gulf meadow")
                 .description("A green area.\nBut not helpful for nature.")

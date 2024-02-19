@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RegExUtils;
 import org.hjson.JsonValue;
 
@@ -12,10 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static lombok.AccessLevel.PRIVATE;
-
 /** Helper methods for writing file data based tests. */
-@NoArgsConstructor(access = PRIVATE)
 public class JsonResourceTestUtil {
 
   /** A mapper allowing non-standard C-style inline comments in json. */

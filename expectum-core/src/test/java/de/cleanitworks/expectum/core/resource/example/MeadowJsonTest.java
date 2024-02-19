@@ -9,20 +9,23 @@ class MeadowJsonTest extends JsonResourceTest {
 
     @Test
     void simpleMeadow() {
-        assertThat(toJson(Meadow.simple())).isEqualTo(json("expected"));
+        assertThat(toJson(Meadow.gulf()))
+                .isEqualTo(json("expected"));
     }
 
     @Test
     void simpleMeadow_hideDescriptionAndPlants() {
         jsonHide(Meadow.class, "description", "plants");
 
-        assertThat(toJson(Meadow.simple())).isEqualTo(json("expected"));
+        assertThat(toJson(Meadow.gulf()))
+                .isEqualTo(json("expected"));
     }
 
     @Test
     void simpleMeadow_showOnlyPlants() {
         jsonShow(Meadow.class, "plants");
 
-        assertThat(toJson(Meadow.simple())).isEqualTo(json("expected"));
+        assertThat(toJson(Meadow.gulf()))
+                .isEqualTo(json("expected"));
     }
 }

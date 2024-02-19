@@ -1,14 +1,15 @@
 package de.cleanitworks.expectum.core.resource;
 
-import lombok.Getter;
-
 /**
  * Convenience base class for tests using json resource files to deliver test fixtures.
  */
 public abstract class JsonResourceTest {
 
-  @Getter
   private final JsonResourceTestDelegate jsonDelegate = new JsonResourceTestDelegate(this::getClass);
+
+  protected JsonResourceTestDelegate getJsonDelegate() {
+    return jsonDelegate;
+  }
 
   protected String toJson(Object obj) {
     return jsonDelegate.toJson(obj);
