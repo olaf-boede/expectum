@@ -24,5 +24,17 @@
       "string": "string value",
       "localDate": "2020-07-01"
     }
+  },
+  "fromJson": {
+    "beandata": {
+      "string": "string value",
+      "localDate": "2020-07-01",
+      "primitiveBoolean": false,
+      "itemList": [
+        {
+          "name": "item name"
+        }
+      ]
+    }
   }
 }

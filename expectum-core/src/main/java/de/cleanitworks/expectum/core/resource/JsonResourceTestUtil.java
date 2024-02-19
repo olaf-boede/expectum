@@ -73,9 +73,8 @@ public class JsonResourceTestUtil {
   }
 
   private static InputStream getResourceFile(Class<?> ctxtClass, String fileName) {
-    var separator = "/"; // String.valueOf(File.separatorChar);
+    var separator = "/";
     // XXX: Use java core only
-
     var pkgPath = RegExUtils.replaceAll(ctxtClass.getPackage().getName(), "\\.+", separator);
     var filePath = separator + pkgPath + separator + fileName;
     var url = ctxtClass.getResource(filePath);

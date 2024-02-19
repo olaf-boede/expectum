@@ -69,6 +69,24 @@ public class JsonResourceTestDelegate {
   }
 
   /**
+   * Reads the json string, referenced by the given jsonPtr, and converts it to a java bean.
+   *
+   * <p>Precondition: The target class should be de-serializable for jackson.
+   *
+   * @param jsonPtr refers to a content node within the json file. E.g.: /myTest/someBeanData or someBeanData
+   * @param targetClass the bean class type to provide.
+   * @return a new bean instance having property values as provided by the json node.
+   */
+  public <T> T fromJson(String jsonPtr, Class<T> targetClass) {
+    try {
+      var jsonString = json(jsonPtr);
+      return objectMapper.readValue(jsonString, targetClass);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException("Unable to deserialize json string.", e);
+    }
+  }
+
+  /**
    * Provides test data from a file having a name matching the class name. E.g. for a test
    * class XTest a corresponding file XTest.json within the test class package will be used.
    *

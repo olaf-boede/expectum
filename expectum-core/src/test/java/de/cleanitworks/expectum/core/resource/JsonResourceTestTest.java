@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -77,9 +78,18 @@ class JsonResourceTestTest extends JsonResourceTest {
     void instant_isoFormat() {
         assertThat(toJson(Instant.parse("2007-12-03T10:15:30.00Z"))).isEqualTo("2007-12-03T10:15:30Z");
     }
+
+    @Test
+    void fromJson() {
+        var bean = fromJson("beandata", TestBean.class);
+
+        assertThat(bean).isNotNull();
+        assertThat(toJson(bean)).isEqualTo(json("beandata"));
+    }
+
 }
 
-@Value @Builder
+@Value @Builder @Jacksonized
 class TestBean {
     String string;
     LocalDate localDate;
@@ -99,7 +109,7 @@ class TestBean {
     }
 }
 
-@Value @Builder
+@Value @Builder @Jacksonized
 class TestItem {
     String name;
 }
