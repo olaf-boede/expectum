@@ -4,6 +4,7 @@
   },
   "testBean": {
     "expected": {
+      "id": 7,
       "string": "string value",
       "localDate": "2020-07-01",
       "primitiveBoolean": false,
@@ -27,6 +28,7 @@
   },
   "fromJson": {
     "beandata": {
+      "id": 8,
       "string": "string value",
       "localDate": "2020-07-01",
       "primitiveBoolean": false,

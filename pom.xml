@@ -11,6 +11,14 @@
     <description>Test support library using file resources for test. E.g. for providing detailed expectations.</description>
     <packaging>pom</packaging>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
@@ -26,8 +34,20 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        <!--
-        -->
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.22.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.5.3</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -43,7 +63,6 @@
         </testResources>
 
         <plugins>
-            <!-- Ausführung von Jupiter Tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
@@ -65,30 +84,9 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>deploy</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <modules>
         <module>expectum-core</module>
+        <module>expectum-hibernate</module>
     </modules>
 
 </project>

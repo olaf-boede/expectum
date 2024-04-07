@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.commons.lang3.StringUtils;
 import de.cleanitworks.expectum.core.junit.TestClassUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -28,6 +28,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class JsonResourceTestDelegate {
 
+  static final List<String> GETTER_PREFIXES = List.of("get", "is");
+
   /**
    * By default, each concrete test class uses a corresponding json test data file having a similar
    * name (class-name.json) within the same test package.
@@ -39,10 +41,7 @@ public class JsonResourceTestDelegate {
   /**
    * The object mapper defines the way, java objects get serialized to json.
    */
-  private ObjectMapper objectMapper = JsonMapper.builder()
-          .addModule(new JavaTimeModule())
-          .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-          .build();
+  private ObjectMapper objectMapper = createObjectMapper();
 
   /**
    * By default, each concrete test class uses a corresponding json test data file having a similar
@@ -53,6 +52,14 @@ public class JsonResourceTestDelegate {
    */
   public JsonResourceTestDelegate(Supplier<Class<?>> testClassSupplier) {
     this.testClassSupplier = requireNonNull(testClassSupplier);
+  }
+
+  public ObjectMapper createObjectMapper() {
+    this.objectMapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .build();
+    return this.objectMapper;
   }
 
   public ObjectMapper getObjectMapper() {
@@ -74,7 +81,7 @@ public class JsonResourceTestDelegate {
    * @param obj the object to serialize.
    * @return a json string generated as defined by the #objectMapper.
    */
-  String toJson(Object obj) {
+  public String toJson(Object obj) {
     try {
       return TextNodeQuoteWorkaround.unquote(getObjectMapper().writeValueAsString(obj));
     } catch (JsonProcessingException e) {
@@ -158,10 +165,9 @@ public class JsonResourceTestDelegate {
    * @param propNames the properties to ignore.
    */
   public void jsonHide(Class<?> cls, String ... propNames) {
-    objectMapper.configOverride(cls).setIgnorals(forIgnoredProperties(propNames));
+    var clsOverride = objectMapper.configOverride(cls);
+    clsOverride.setIgnorals(forIgnoredProperties(propNames));
   }
-
-  static final List<String> GETTER_PREFIXES = List.of("get", "is");
 
   /**
    * Configures {@link #objectMapper} to serialize only the given properties for the given class.

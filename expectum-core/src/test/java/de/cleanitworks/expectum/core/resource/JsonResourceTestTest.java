@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -30,7 +31,7 @@ class JsonResourceTestTest extends JsonResourceTest {
 
     @Test
     void jsonHide() {
-        jsonHide(TestBean.class, "localDate", "itemList", "primitiveBoolean");
+        jsonHide(TestBean.class, "id", "localDate", "itemList", "primitiveBoolean");
 
         assertThat(toJson(TestBean.create())).isEqualTo(json("expected"));
     }
@@ -43,11 +44,55 @@ class JsonResourceTestTest extends JsonResourceTest {
     }
 
     @Test
+    // TODO: does not yet work
+    @Disabled
+    void jsonShowTwice() {
+        jsonShow(TestBean.class, "string");
+        assertThat(toJson(TestBean.create()))
+                .isEqualTo("{\"string\":\"string value\"}");
+
+        jsonShow(TestBean.class, "localDate", "string");
+        assertThat(toJson(TestBean.create()))
+                .isEqualTo("{\"string\":\"string value\",\"localDate\":\"2020-07-01\"}");
+    }
+
+    @Test
+    // TODO: does not yet work
+    @Disabled
+    void jsonShowAndHide() {
+        jsonShow(TestBean.class, "string");
+        jsonHide(TestBean.class, "string");
+
+        assertThat(toJson(TestBean.create())).isEqualTo("{}");
+    }
+
+    @Test
+    void jsonHideAndShow() {
+        jsonHide(TestBean.class, "string");
+        jsonShow(TestBean.class, "string");
+
+        assertThat(toJson(TestBean.create()))
+                .isEqualTo("{\"string\":\"string value\"}");
+    }
+
+    @Test
+    // TODO: does not yet work
+    @Disabled
+    void jsonHideTwice() {
+        jsonHide(TestBean.class, "id", "localDate", "itemList", "primitiveBoolean");
+        jsonHide(TestBean.class, "string");
+
+        assertThat(toJson(TestBean.create()))
+                .isEqualTo("{\"string\":\"string value\"}");
+    }
+
+
+    @Test
     void jsonShow_withUnknownPropertyName_fails() {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> jsonShow(TestBean.class, "unknown"))
                 .withMessage("Properties not found in the given class. Available properties are: " +
-                        "[itemList, localDate, primitiveBoolean, string]");
+                        "[id, itemList, localDate, primitiveBoolean, string]");
     }
 
     @Test
@@ -91,6 +136,7 @@ class JsonResourceTestTest extends JsonResourceTest {
 
 @Value @Builder @Jacksonized
 class TestBean {
+    Integer id;
     String string;
     LocalDate localDate;
     boolean primitiveBoolean;
@@ -98,6 +144,7 @@ class TestBean {
 
     static TestBean create() {
         return TestBean.builder()
+                .id(7)
                 .string("string value")
                 .localDate(LocalDate.parse("2020-07-01"))
                 .itemList(List.of(TestItem.builder().name("item name").build()))
