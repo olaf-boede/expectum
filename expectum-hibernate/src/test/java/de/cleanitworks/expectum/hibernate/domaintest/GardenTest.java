@@ -55,19 +55,14 @@ class GardenTest extends HibernateJsonResourceTest {
                 .isEqualTo("{\"name\":\"Potato\"}");
     }
 
-    // TODO: No stable test solution for Hibernate-Jackson module behavior available yet.
-    //   But it might not be critical, since content of unresolved entities might not be critical
-    //   for most result verifications.
-    @Test
-    void plantUnresolved_serializesToId_evenIfHideIdWasExpressed() {
-        var garden = session.find(Garden.class, smallGardenId);
-        var plant = garden.getBeds().get(0).getPlant();
-
-        jsonHide(Plant.class, "id");
-        assertThat(toJson(plant))
-                .startsWith("{\"id\":");
-    }
-
+    /**
+     * The feature Hibernate6Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS
+     * allows to show the object id of unresolved references.
+     *
+     * This might be a nice feature for tests having stable ids.
+     * In case of instable ids (like this one, using an in-memory db) it might be good idea
+     * to exclude such unresolved fields (see: jsonHide or jsonShow).
+     */
     @Test
     void resolvedCollectionWithUnresolvedItems_showsItemIds() {
         var garden = session.find(Garden.class, smallGardenId);
@@ -76,10 +71,19 @@ class GardenTest extends HibernateJsonResourceTest {
 
         jsonHide(Garden.class, "id");
         jsonShow(Bed.class, "plant");
-        jsonHide(Plant.class, "id");
 
         assertThat(toJson(garden))
                 .startsWith("{\"beds\":[{\"plant\":{\"id\":");
+    }
+
+    @Test
+    void plantUnresolved_serializesToId_evenIfHideIdWasExpressed() {
+        var garden = session.find(Garden.class, smallGardenId);
+        var plant = garden.getBeds().get(0).getPlant();
+
+        jsonHide(Plant.class, "id");
+        assertThat(toJson(plant))
+                .startsWith("{\"id\":");
     }
 
     @Test
