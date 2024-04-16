@@ -123,15 +123,15 @@ public class JsonResourceTestDelegate {
    * @param nodePtr refers to a content node within the json file. E.g.: /myTest/request
    * @return the content string of the referenced node (unformatted json).
    */
-  protected String json(String nodePtr) {
+  public String json(String nodePtr) {
     return json(testClassSupplier.get(), nodePtr);
   }
 
-  protected String hjson(String nodePtr) {
+  public String hjson(String nodePtr) {
     return hjson(testClassSupplier.get(), nodePtr);
   }
 
-  protected String hjson(Class<?> ctxtClass, String nodePtr) {
+  public String hjson(Class<?> ctxtClass, String nodePtr) {
     var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
     return JsonResourceTestUtil.hjsonData(ctxtClass, absolutePtr);
   }
@@ -145,17 +145,9 @@ public class JsonResourceTestDelegate {
    * @param nodePtr refers to a content node within the json file. E.g.: /myTest/request
    * @return the content string of the referenced node (unformatted json).
    */
-  protected String json(Class<?> ctxtClass, String nodePtr) {
+  public String json(Class<?> ctxtClass, String nodePtr) {
     var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
     return JsonResourceTestUtil.jsonData(ctxtClass, absolutePtr);
-  }
-
-  private String nodePtrToAbsolutePtr(Class<?> ctxtClass, String nodePtr) {
-    var isAbsolutePtr = requireNonNull(nodePtr, "nodePtr should not be null.")
-            .startsWith("/");
-    return isAbsolutePtr
-            ? nodePtr
-            : "/" + TestClassUtil.getTestMethodName(ctxtClass) + "/" + nodePtr;
   }
 
   /**
@@ -175,7 +167,7 @@ public class JsonResourceTestDelegate {
    * @param cls the class to configure the property restriction for.
    * @param propNames the properties to write on json serialization.
    */
-  protected void jsonShow(Class<?> cls, String... propNames) {
+  public void jsonShow(Class<?> cls, String... propNames) {
     var propsToShow = Set.of(propNames);
     var allProps = Stream.of(cls.getMethods())
             .filter(m -> m.getDeclaringClass() != Object.class)
@@ -216,6 +208,14 @@ public class JsonResourceTestDelegate {
       }
     }
     return null;
+  }
+
+  private String nodePtrToAbsolutePtr(Class<?> ctxtClass, String nodePtr) {
+    var isAbsolutePtr = requireNonNull(nodePtr, "nodePtr should not be null.")
+          .startsWith("/");
+    return isAbsolutePtr
+          ? nodePtr
+          : "/" + TestClassUtil.getTestMethodName(ctxtClass) + "/" + nodePtr;
   }
 
 }
