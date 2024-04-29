@@ -1,13 +1,13 @@
 package de.cleanitworks.expectum.core.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.cleanitworks.expectum.core.junit.TestClassUtil;
-import org.apache.commons.lang3.StringUtils;
+import static com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value.forIgnoredProperties;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -16,9 +16,21 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value.forIgnoredProperties;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
+import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hjson.JsonValue;
+import org.json.JSONException;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import de.cleanitworks.expectum.core.junit.TestClassUtil;
 
 /**
  * Supports junit tests using json and hjson resource files.
@@ -133,7 +145,7 @@ public class JsonResourceTestDelegate {
 
   public String hjson(Class<?> ctxtClass, String nodePtr) {
     var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
-    return JsonResourceTestUtil.hjsonData(ctxtClass, absolutePtr);
+    return hjsonData(ctxtClass, absolutePtr);
   }
 
   /**
@@ -146,8 +158,36 @@ public class JsonResourceTestDelegate {
    * @return the content string of the referenced node (unformatted json).
    */
   public String json(Class<?> ctxtClass, String nodePtr) {
-    var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
-    return JsonResourceTestUtil.jsonData(ctxtClass, absolutePtr);
+    return getNodeAsString(
+          ctxtClass,
+          ctxtClass.getSimpleName() + ".json",
+          nodePtrToAbsolutePtr(ctxtClass, nodePtr));
+  }
+
+   /**
+   * Compares the json serialization result of the given bean to expected json content referenced by the given relative
+   * json pointer.
+   * <p/>
+   * Performs first a simple string compare operation.
+   * If that fails an additional JSONAssert compare operation is used to provide more details about the difference.
+   *
+   * @param bean the bean to verify.
+   * @param nodeInTestMethodJson the json-subnode containing the expected bean data.
+   */
+  public void assertJsonNode(Object bean, String nodeInTestMethodJson) {
+    var beanJson = toJson(bean);
+    var expectedJson = json(nodeInTestMethodJson);
+    try {
+      assertThat(beanJson).isEqualTo(expectedJson);
+    } catch (AssertionError stringCompareError) {
+      try {
+        JSONAssert.assertEquals(expectedJson, beanJson, JSONCompareMode.STRICT);
+      } catch (JSONException je) {
+      } catch (AssertionError jsonAssertError) {
+        System.out.println("JSONAssert finding: " + jsonAssertError.getMessage());
+      }
+      throw stringCompareError;
+    }
   }
 
   /**
@@ -216,6 +256,68 @@ public class JsonResourceTestDelegate {
     return isAbsolutePtr
           ? nodePtr
           : "/" + TestClassUtil.getTestMethodName(ctxtClass) + "/" + nodePtr;
+  }
+
+  private String hjsonData(Class<?> testClass, String nodePtr) {
+    var fileName = testClass.getSimpleName() + ".hjson";
+    try (var reader = new InputStreamReader(getResourceFile(testClass, fileName))) {
+      var jsonString = JsonValue.readHjson(reader).toString();
+      var rootNode = (ObjectNode) resFileObjectMapper().readTree(jsonString);
+      return getNodeAsString(rootNode, fileName, nodePtr);
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to read " + fileName, e);
+    }
+  }
+
+  private String getNodeAsString(Class<?> ctxtClass, String jsonFileName, String nodePtr) {
+    var root = getRootNode(ctxtClass, jsonFileName);
+    return getNodeAsString(root, jsonFileName, nodePtr);
+  }
+
+  private String getNodeAsString(ObjectNode root, String fileName, String nodePtr) {
+    var subNode = root.at(nodePtr);
+    if (subNode.isMissingNode()) {
+      throw new IllegalArgumentException(
+            "Node '" + nodePtr + "' not found in file: " + fileName);
+    }
+
+    try {
+      var nodeString = resFileObjectMapper().writeValueAsString(subNode);
+      return TextNodeQuoteWorkaround.unquote(nodeString);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException(
+            "Unable to read value of '" + nodePtr + "' from file " + fileName, e);
+    }
+  }
+
+  private ObjectNode getRootNode(Class<?> ctxtClass, String jsonFileName) {
+    try (var inputStream = getResourceFile(ctxtClass, jsonFileName)) {
+      return (ObjectNode) resFileObjectMapper().readTree(inputStream);
+    } catch (IOException e) {
+      throw new IllegalStateException(
+            "Unable to read json content from file '" + jsonFileName + "'.", e);
+    }
+  }
+
+  /**
+   * Separate getter. Should be used for all code parts dealing with expectation data.
+   *
+   * @return the OM used for deserializing/serializing expectation data located in json resource files.
+   */
+  protected ObjectMapper resFileObjectMapper() {
+    return objectMapper;
+  }
+
+  private InputStream getResourceFile(Class<?> ctxtClass, String fileName) {
+    var separator = "/";
+    // XXX: Use java core only
+    var pkgPath = RegExUtils.replaceAll(ctxtClass.getPackage().getName(), "\\.+", separator);
+    var filePath = separator + pkgPath + separator + fileName;
+    var url = ctxtClass.getResource(filePath);
+    if (url == null) {
+      throw new IllegalArgumentException("Resource file not found: " + filePath);
+    }
+    return JsonResourceTestDelegate.class.getResourceAsStream(filePath);
   }
 
 }
