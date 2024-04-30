@@ -8,6 +8,10 @@ public interface JsonResourceTestMixin {
       return getJsonDelegate().toJson(obj);
    }
 
+   default <T> T fromJson(String jsonPtr, Class<T> targetClass) {
+      return getJsonDelegate().fromJson(jsonPtr, targetClass);
+   }
+
    /**
     * Provides test data from a file having the a similar name to the class name. E.g. for a test
     * class XTest a corresponding file XTest.json will be read (within the same package path).

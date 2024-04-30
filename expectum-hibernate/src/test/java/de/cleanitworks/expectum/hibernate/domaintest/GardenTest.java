@@ -46,11 +46,14 @@ class GardenTest extends HibernateJsonResourceTest {
 
     @Test
     void plantResolved() {
+        jsonShow(Plant.class, "name");
+
+        // given
         var garden = session.find(Garden.class, smallGardenId);
         var plant = garden.getBeds().get(0).getPlant();
         plant.getName();
 
-        jsonShow(Plant.class, "name");
+        // when - then
         assertThat(toJson(plant))
                 .isEqualTo("{\"name\":\"Potato\"}");
     }
@@ -65,12 +68,12 @@ class GardenTest extends HibernateJsonResourceTest {
      */
     @Test
     void resolvedCollectionWithUnresolvedItems_showsItemIds() {
+        jsonHide(Garden.class, "id");
+        jsonShow(Bed.class, "plant");
+
         var garden = session.find(Garden.class, smallGardenId);
         // resolve collection via navigation. Items are still unresolved.
         assertThat(garden.getBeds()).hasSize(1);
-
-        jsonHide(Garden.class, "id");
-        jsonShow(Bed.class, "plant");
 
         assertThat(toJson(garden))
                 .startsWith("{\"beds\":[{\"plant\":{\"id\":");
@@ -96,7 +99,7 @@ class GardenTest extends HibernateJsonResourceTest {
         // trigger resolution via navigation:
         garden.getBeds().get(0).getPlant().getName();
 
-        assertThat(toJson(garden)).isEqualTo(json("gardenWithResolvedBedsAndPlants"));
+        assertJsonNode(garden, "gardenWithResolvedBedsAndPlants");
     }
 
     @Test
@@ -109,7 +112,7 @@ class GardenTest extends HibernateJsonResourceTest {
         var bed = garden.getBeds().get(0);
         bed.getPlant().getName();
 
-        assertThat(toJson(bed)).isEqualTo(json("bed"));
+        assertJsonNode(bed, "bed");
     }
 
     Garden.GardenBuilder smallGarden() {
