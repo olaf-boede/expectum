@@ -1,5 +1,7 @@
 package de.cleanitworks.expectum.core.resource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public interface JsonResourceTestMixin {
 
    JsonResourceTestDelegate getJsonDelegate();
@@ -64,6 +66,10 @@ public interface JsonResourceTestMixin {
 
    default void assertJsonNode(Object bean, String nodeInTestMethodJson) {
       getJsonDelegate().assertJsonNode(bean, nodeInTestMethodJson);
+   }
+
+   default ObjectMapper getObjectMapper() {
+      return getJsonDelegate().getObjectMapper();
    }
 
 }
