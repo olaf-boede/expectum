@@ -1,0 +1,29 @@
+{
+  "unresolvedCollectionSerializedToNull": {
+    "garden": {
+      "beds": null
+    }
+  },
+  "resolvedCollectionAndReference": {
+    "gardenWithResolvedBedsAndPlants": {
+      "beds": [
+        {
+          "name": "Small bed",
+          "plant": {
+            "name": "Potato"
+          },
+          "numberOfPlants": 10
+        }
+      ]
+    }
+  },
+  "resolvedCollectionAndReference_serializeChild": {
+    "bed": {
+      "name": "Small bed",
+      "plant": {
+        "name": "Potato"
+      },
+      "numberOfPlants": 10
+    }
+  }
+}
