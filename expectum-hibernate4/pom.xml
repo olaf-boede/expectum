@@ -13,7 +13,8 @@
     <description>Lazy load support for hibernate4 entities.</description>
 
     <properties>
-        <hibernate.version>6.4.4.Final</hibernate.version>
+        <hibernate.version>5.4.32.Final</hibernate.version>
+<!--        <hibernate.version>5.6.15.Final</hibernate.version>-->
     </properties>
 
 
@@ -32,11 +33,25 @@
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate6</artifactId>
-            <version>2.16.1</version>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <!-- XXX: dependency management of parent has no effect here. -->
+            <version>${jackson.version}</version>
         </dependency>
+        <!-- XXX: Isn't that a transitive dependency of the hibernate module?  -->
         <dependency>
-            <groupId>org.hibernate.orm</groupId>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.28.0-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
             <scope>provided</scope>

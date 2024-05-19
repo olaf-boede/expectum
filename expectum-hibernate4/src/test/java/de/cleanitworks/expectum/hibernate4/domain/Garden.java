@@ -1,11 +1,11 @@
 package de.cleanitworks.expectum.hibernate4.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
 import java.util.List;
 
 import static lombok.AccessLevel.PACKAGE;

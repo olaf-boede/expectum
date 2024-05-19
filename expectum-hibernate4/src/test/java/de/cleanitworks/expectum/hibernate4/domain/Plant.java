@@ -1,10 +1,11 @@
 package de.cleanitworks.expectum.hibernate4.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import static lombok.AccessLevel.PACKAGE;
 
