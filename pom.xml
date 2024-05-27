@@ -113,6 +113,7 @@
     <modules>
         <module>expectum-core</module>
         <module>expectum-hibernate</module>
+        <module>expectum-hibernate5</module>
     </modules>
 
 </project>
