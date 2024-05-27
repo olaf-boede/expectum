@@ -9,14 +9,12 @@
         <version>0.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>expectum-hibernate4</artifactId>
-    <description>Lazy load support for hibernate4 entities.</description>
+    <artifactId>expectum-hibernate5</artifactId>
+    <description>Lazy load support for hibernate5 entities.</description>
 
     <properties>
         <hibernate.version>5.4.32.Final</hibernate.version>
-<!--        <hibernate.version>5.6.15.Final</hibernate.version>-->
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -33,7 +31,7 @@
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
             <!-- XXX: dependency management of parent has no effect here. -->
             <version>${jackson.version}</version>
         </dependency>

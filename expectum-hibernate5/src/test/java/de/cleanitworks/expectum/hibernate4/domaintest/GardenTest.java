@@ -1,6 +1,6 @@
 package de.cleanitworks.expectum.hibernate4.domaintest;
 
-import de.cleanitworks.expectum.hibernate4.HibernateJsonResourceTest4;
+import de.cleanitworks.expectum.hibernate4.Hibernate5JsonResourceTest;
 import de.cleanitworks.expectum.hibernate4.domain.Bed;
 import de.cleanitworks.expectum.hibernate4.domain.Garden;
 import de.cleanitworks.expectum.hibernate4.domain.Plant;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GardenTest extends HibernateJsonResourceTest4 {
+class GardenTest extends Hibernate5JsonResourceTest {
 
     long smallGardenId;
 

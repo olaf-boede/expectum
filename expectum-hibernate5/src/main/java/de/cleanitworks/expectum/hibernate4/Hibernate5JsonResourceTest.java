@@ -1,6 +1,6 @@
 package de.cleanitworks.expectum.hibernate4;
 
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import de.cleanitworks.expectum.core.resource.JsonResourceTest;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
@@ -8,15 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.function.Consumer;
 
-public abstract class HibernateJsonResourceTest4 extends JsonResourceTest {
+public abstract class Hibernate5JsonResourceTest extends JsonResourceTest {
 
     protected Session session;
 
     @BeforeEach
     void hibernateSerializer() {
         var om = getJsonDelegate().createObjectMapper();
-        om.registerModule(new Hibernate4Module()
-                .configure(Hibernate4Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true));
+        om.registerModule(new Hibernate5Module()
+                .configure(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true));
         // XXX: useful general setup?
         // om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }

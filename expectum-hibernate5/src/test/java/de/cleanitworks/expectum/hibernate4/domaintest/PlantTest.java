@@ -1,12 +1,12 @@
 package de.cleanitworks.expectum.hibernate4.domaintest;
 
-import de.cleanitworks.expectum.hibernate4.HibernateJsonResourceTest4;
+import de.cleanitworks.expectum.hibernate4.Hibernate5JsonResourceTest;
 import de.cleanitworks.expectum.hibernate4.domain.Plant;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PlantTest extends HibernateJsonResourceTest4 {
+class PlantTest extends Hibernate5JsonResourceTest {
 
     @Test
     void plantPersistence() {
