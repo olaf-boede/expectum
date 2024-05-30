@@ -10,11 +10,11 @@ class PlantTest extends Hibernate5JsonResourceTest {
 
     @Test
     void plantPersistence() {
-            var plant = Plant.builder().name("Gänseblümchen").build();
+            Plant plant = Plant.builder().name("Gänseblümchen").build();
 
             doInTxn(session -> session.persist(plant));
 
-            var foundPlant = session.find(Plant.class, plant.getId());
+            Plant foundPlant = session.find(Plant.class, plant.getId());
 
             assertThat(foundPlant)
                     .isNotNull()

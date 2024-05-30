@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
+import static de.cleanitworks.expectum.core.Java8Util.listOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -106,7 +107,7 @@ class JsonResourceTestTest extends JsonResourceTest {
     void jsonHide_doesNotYetWorkForSubclass() {
         jsonHide(MyBean.class, "hiddenField");
 
-        var anonymousBean = new MyBean("field value", "hidden value") {};
+        MyBean anonymousBean = new MyBean("field value", "hidden value") {};
         assertThat(toJson(anonymousBean))
                 // Ups: Hidden field should not appear here!
                 .isEqualTo("{\"hiddenField\":\"hidden value\",\"afield\":\"field value\"}");
@@ -120,7 +121,7 @@ class JsonResourceTestTest extends JsonResourceTest {
         }
         getObjectMapper().addMixIn(MyBean.class, MyBeanJsonMixin.class);
 
-        var anonymousBean = new MyBean("field value", "hidden value") {};
+        MyBean anonymousBean = new MyBean("field value", "hidden value") {};
 
         // when - then
         assertThat(toJson(anonymousBean))
@@ -162,7 +163,7 @@ class JsonResourceTestTest extends JsonResourceTest {
 
     @Test
     void fromJson() {
-        var bean = fromJson("beandata", TestBean.class);
+        TestBean bean = fromJson("beandata", TestBean.class);
 
         assertThat(bean).isNotNull();
         assertThat(toJson(bean))
@@ -184,7 +185,7 @@ class TestBean {
                 .id(7)
                 .string("string value")
                 .localDate(LocalDate.parse("2020-07-01"))
-                .itemList(List.of(TestItem.builder().name("item name").build()))
+                .itemList(listOf(TestItem.builder().name("item name").build()))
                 .build();
     }
 

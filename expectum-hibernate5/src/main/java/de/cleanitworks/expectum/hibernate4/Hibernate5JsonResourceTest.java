@@ -1,5 +1,6 @@
 package de.cleanitworks.expectum.hibernate4;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import de.cleanitworks.expectum.core.resource.JsonResourceTest;
 import org.hibernate.Session;
@@ -14,7 +15,7 @@ public abstract class Hibernate5JsonResourceTest extends JsonResourceTest {
 
     @BeforeEach
     void hibernateSerializer() {
-        var om = getJsonDelegate().createObjectMapper();
+        ObjectMapper om = getJsonDelegate().createObjectMapper();
         om.registerModule(new Hibernate5Module()
                 .configure(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true));
         // XXX: useful general setup?
@@ -34,7 +35,7 @@ public abstract class Hibernate5JsonResourceTest extends JsonResourceTest {
     }
 
     protected void doInTxn(Consumer<Session> runnable) {
-        try(var writeSession = HibernateUtil.getSessionFactory().openSession()) {
+        try(Session writeSession = HibernateUtil.getSessionFactory().openSession()) {
             writeSession.beginTransaction();
             runnable.accept(writeSession);
             writeSession.flush();

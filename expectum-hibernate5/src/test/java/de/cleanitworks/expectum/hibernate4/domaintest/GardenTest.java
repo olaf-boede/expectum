@@ -1,13 +1,12 @@
 package de.cleanitworks.expectum.hibernate4.domaintest;
 
+import de.cleanitworks.expectum.core.Java8Util;
 import de.cleanitworks.expectum.hibernate4.Hibernate5JsonResourceTest;
 import de.cleanitworks.expectum.hibernate4.domain.Bed;
 import de.cleanitworks.expectum.hibernate4.domain.Garden;
 import de.cleanitworks.expectum.hibernate4.domain.Plant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,18 +16,16 @@ class GardenTest extends Hibernate5JsonResourceTest {
 
     @BeforeEach
     void beforeEachStoreAndForgetGarden() {
-        var garden = smallGarden().build();
+        Garden garden = smallGarden().build();
 
-        doInTxn(session -> {
-            session.persist(garden);
-        });
+        doInTxn(session -> session.persist(garden));
 
         smallGardenId = garden.getId();
     }
 
     @Test
     void unresolvedCollectionSerializedToNull() {
-        var garden = session.find(Garden.class, smallGardenId);
+        Garden garden = session.find(Garden.class, smallGardenId);
 
         jsonShow(Garden.class, "beds");
         assertThat(toJson(garden))
@@ -37,7 +34,7 @@ class GardenTest extends Hibernate5JsonResourceTest {
 
     @Test
     void hideAllFields() {
-        var garden = session.find(Garden.class, smallGardenId);
+        Garden garden = session.find(Garden.class, smallGardenId);
 
         jsonHide(Garden.class, "id", "beds");
         assertThat(toJson(garden))
@@ -49,8 +46,8 @@ class GardenTest extends Hibernate5JsonResourceTest {
         jsonShow(Plant.class, "name");
 
         // given
-        var garden = session.find(Garden.class, smallGardenId);
-        var plant = garden.getBeds().get(0).getPlant();
+        Garden garden = session.find(Garden.class, smallGardenId);
+        Plant plant = garden.getBeds().get(0).getPlant();
         plant.getName();
 
         // when - then
@@ -71,7 +68,7 @@ class GardenTest extends Hibernate5JsonResourceTest {
         jsonHide(Garden.class, "id");
         jsonShow(Bed.class, "plant");
 
-        var garden = session.find(Garden.class, smallGardenId);
+        Garden garden = session.find(Garden.class, smallGardenId);
         // resolve collection via navigation. Items are still unresolved.
         assertThat(garden.getBeds()).hasSize(1);
 
@@ -81,8 +78,8 @@ class GardenTest extends Hibernate5JsonResourceTest {
 
     @Test
     void plantUnresolved_serializesToId_evenIfHideIdWasExpressed() {
-        var garden = session.find(Garden.class, smallGardenId);
-        var plant = garden.getBeds().get(0).getPlant();
+        Garden garden = session.find(Garden.class, smallGardenId);
+        Plant plant = garden.getBeds().get(0).getPlant();
 
         jsonHide(Plant.class, "id");
         assertThat(toJson(plant))
@@ -95,7 +92,7 @@ class GardenTest extends Hibernate5JsonResourceTest {
         jsonHide(Bed.class, "id");
         jsonHide(Plant.class, "id");
 
-        var garden = session.find(Garden.class, smallGardenId);
+        Garden garden = session.find(Garden.class, smallGardenId);
         // trigger resolution via navigation:
         garden.getBeds().get(0).getPlant().getName();
 
@@ -107,9 +104,9 @@ class GardenTest extends Hibernate5JsonResourceTest {
         jsonHide(Bed.class, "id");
         jsonHide(Plant.class, "id");
 
-        var garden = session.find(Garden.class, smallGardenId);
+        Garden garden = session.find(Garden.class, smallGardenId);
         // trigger resolution via navigation:
-        var bed = garden.getBeds().get(0);
+        Bed bed = garden.getBeds().get(0);
         bed.getPlant().getName();
 
         assertJsonNode(bed, "bed");
@@ -118,7 +115,7 @@ class GardenTest extends Hibernate5JsonResourceTest {
     Garden.GardenBuilder smallGarden() {
         return Garden.builder()
                // .id(6l)
-                .beds(List.of(
+                .beds(Java8Util.listOf(
                         Bed.builder()
                                 .name("Small bed")
                                 .numberOfPlants(10)

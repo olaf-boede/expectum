@@ -1,21 +1,15 @@
 package de.cleanitworks.expectum.core.resource;
 
-import static com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value.forIgnoredProperties;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.cfg.MutableConfigOverride;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import de.cleanitworks.expectum.core.Java8Util;
+import de.cleanitworks.expectum.core.junit.TestClassUtil;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hjson.JsonValue;
@@ -23,14 +17,23 @@ import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import de.cleanitworks.expectum.core.junit.TestClassUtil;
+import static com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value.forIgnoredProperties;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Supports junit tests using json and hjson resource files.
@@ -40,7 +43,7 @@ import de.cleanitworks.expectum.core.junit.TestClassUtil;
  */
 public class JsonResourceTestDelegate {
 
-  static final List<String> GETTER_PREFIXES = List.of("get", "is");
+  static final List<String> GETTER_PREFIXES = Java8Util.listOf("get", "is");
 
   /**
    * By default, each concrete test class uses a corresponding json test data file having a similar
@@ -112,7 +115,7 @@ public class JsonResourceTestDelegate {
    */
   public <T> T fromJson(String jsonPtr, Class<T> targetClass) {
     try {
-      var jsonString = json(jsonPtr);
+      String jsonString = json(jsonPtr);
       return objectMapper.readValue(jsonString, targetClass);
     } catch (JsonProcessingException e) {
       throw new IllegalArgumentException("Unable to deserialize json string.", e);
@@ -144,7 +147,7 @@ public class JsonResourceTestDelegate {
   }
 
   public String hjson(Class<?> ctxtClass, String nodePtr) {
-    var absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
+    String absolutePtr = nodePtrToAbsolutePtr(ctxtClass, nodePtr);
     return hjsonData(ctxtClass, absolutePtr);
   }
 
@@ -175,8 +178,8 @@ public class JsonResourceTestDelegate {
    * @param nodeInTestMethodJson the json-subnode containing the expected bean data.
    */
   public void assertJsonNode(Object bean, String nodeInTestMethodJson) {
-    var beanJson = toJson(bean);
-    var expectedJson = json(nodeInTestMethodJson);
+    String beanJson = toJson(bean);
+    String expectedJson = json(nodeInTestMethodJson);
     try {
       assertThat(beanJson).isEqualTo(expectedJson);
     } catch (AssertionError stringCompareError) {
@@ -197,7 +200,7 @@ public class JsonResourceTestDelegate {
    * @param propNames the properties to ignore.
    */
   public void jsonHide(Class<?> cls, String ... propNames) {
-    var clsOverride = objectMapper.configOverride(cls);
+    MutableConfigOverride clsOverride = objectMapper.configOverride(cls);
     clsOverride.setIgnorals(forIgnoredProperties(propNames));
   }
 
@@ -208,13 +211,13 @@ public class JsonResourceTestDelegate {
    * @param propNames the properties to write on json serialization.
    */
   public void jsonShow(Class<?> cls, String... propNames) {
-    var propsToShow = Set.of(propNames);
-    var allProps = Stream.of(cls.getMethods())
+    Set<String> propsToShow = Java8Util.setOf(propNames);
+    List<String> allProps = Stream.of(cls.getMethods())
             .filter(m -> m.getDeclaringClass() != Object.class)
             .map(JsonResourceTestDelegate::getterToPropertyName)
             .filter(Objects::nonNull)
             .collect(toList());
-    var propsToHide = allProps.stream()
+    List<String> propsToHide = allProps.stream()
             .filter(n -> !propsToShow.contains(n))
             .collect(toList());
 
@@ -241,8 +244,8 @@ public class JsonResourceTestDelegate {
       return null;
     }
 
-    var methodName = method.getName();
-    for (var getterPfx : GETTER_PREFIXES) {
+    String methodName = method.getName();
+    for (String getterPfx : GETTER_PREFIXES) {
       if (methodName.startsWith(getterPfx)) {
         return StringUtils.uncapitalize(StringUtils.substringAfter(methodName, getterPfx));
       }
@@ -251,7 +254,7 @@ public class JsonResourceTestDelegate {
   }
 
   private String nodePtrToAbsolutePtr(Class<?> ctxtClass, String nodePtr) {
-    var isAbsolutePtr = requireNonNull(nodePtr, "nodePtr should not be null.")
+    boolean isAbsolutePtr = requireNonNull(nodePtr, "nodePtr should not be null.")
           .startsWith("/");
     return isAbsolutePtr
           ? nodePtr
@@ -259,10 +262,10 @@ public class JsonResourceTestDelegate {
   }
 
   private String hjsonData(Class<?> testClass, String nodePtr) {
-    var fileName = testClass.getSimpleName() + ".hjson";
-    try (var reader = new InputStreamReader(getResourceFile(testClass, fileName))) {
-      var jsonString = JsonValue.readHjson(reader).toString();
-      var rootNode = (ObjectNode) resFileObjectMapper().readTree(jsonString);
+    String fileName = testClass.getSimpleName() + ".hjson";
+    try (Reader reader = new InputStreamReader(getResourceFile(testClass, fileName))) {
+      String jsonString = JsonValue.readHjson(reader).toString();
+      ObjectNode rootNode = (ObjectNode) resFileObjectMapper().readTree(jsonString);
       return getNodeAsString(rootNode, fileName, nodePtr);
     } catch (IOException e) {
       throw new IllegalStateException("Unable to read " + fileName, e);
@@ -270,19 +273,19 @@ public class JsonResourceTestDelegate {
   }
 
   private String getNodeAsString(Class<?> ctxtClass, String jsonFileName, String nodePtr) {
-    var root = getRootNode(ctxtClass, jsonFileName);
+    ObjectNode root = getRootNode(ctxtClass, jsonFileName);
     return getNodeAsString(root, jsonFileName, nodePtr);
   }
 
   private String getNodeAsString(ObjectNode root, String fileName, String nodePtr) {
-    var subNode = root.at(nodePtr);
+    JsonNode subNode = root.at(nodePtr);
     if (subNode.isMissingNode()) {
       throw new IllegalArgumentException(
             "Node '" + nodePtr + "' not found in file: " + fileName);
     }
 
     try {
-      var nodeString = resFileObjectMapper().writeValueAsString(subNode);
+      String nodeString = resFileObjectMapper().writeValueAsString(subNode);
       return TextNodeQuoteWorkaround.unquote(nodeString);
     } catch (JsonProcessingException e) {
       throw new IllegalArgumentException(
@@ -291,7 +294,7 @@ public class JsonResourceTestDelegate {
   }
 
   private ObjectNode getRootNode(Class<?> ctxtClass, String jsonFileName) {
-    try (var inputStream = getResourceFile(ctxtClass, jsonFileName)) {
+    try (InputStream inputStream = getResourceFile(ctxtClass, jsonFileName)) {
       return (ObjectNode) resFileObjectMapper().readTree(inputStream);
     } catch (IOException e) {
       throw new IllegalStateException(
@@ -309,11 +312,11 @@ public class JsonResourceTestDelegate {
   }
 
   private InputStream getResourceFile(Class<?> ctxtClass, String fileName) {
-    var separator = "/";
+    String separator = "/";
     // XXX: Use java core only
-    var pkgPath = RegExUtils.replaceAll(ctxtClass.getPackage().getName(), "\\.+", separator);
-    var filePath = separator + pkgPath + separator + fileName;
-    var url = ctxtClass.getResource(filePath);
+    String pkgPath = RegExUtils.replaceAll(ctxtClass.getPackage().getName(), "\\.+", separator);
+    String filePath = separator + pkgPath + separator + fileName;
+    URL url = ctxtClass.getResource(filePath);
     if (url == null) {
       throw new IllegalArgumentException("Resource file not found: " + filePath);
     }
