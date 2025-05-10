@@ -1,4 +1,4 @@
-package de.cleanitworks.expectum.hibernate4.domain;
+package de.cleanitworks.expectum.hibernate5.domain;
 
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;

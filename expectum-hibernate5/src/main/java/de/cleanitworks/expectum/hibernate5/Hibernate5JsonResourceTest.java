@@ -1,4 +1,4 @@
-package de.cleanitworks.expectum.hibernate4;
+package de.cleanitworks.expectum.hibernate5;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
@@ -24,7 +24,7 @@ public abstract class Hibernate5JsonResourceTest extends JsonResourceTest {
 
     @BeforeEach
     void rootSession() {
-        session = de.cleanitworks.expectum.hibernate4.HibernateUtil.getSessionFactory().openSession();
+        session = de.cleanitworks.expectum.hibernate5.HibernateUtil.getSessionFactory().openSession();
     }
 
     @AfterEach

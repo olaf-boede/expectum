@@ -45,15 +45,20 @@ class GardenTest extends HibernateJsonResourceTest {
     }
 
     @Test
-    void plantResolved() {
+    void plantRelationUnresolvedAndResolved() {
         jsonShow(Plant.class, "name");
 
         // given
         var garden = session.find(Garden.class, smallGardenId);
         var plant = garden.getBeds().get(0).getPlant();
-        plant.getName();
 
-        // when - then
+        // when unresolved proxy - only the key will be shown
+        assertThat(toJson(plant))
+                // .matches("{\"id\":*}") // XXX: does not compile. Why?
+                .startsWith("{\"id\":");
+
+        // when relation is resolved - the bean field values will be reported.
+        plant.getName();
         assertThat(toJson(plant))
                 .isEqualTo("{\"name\":\"Potato\"}");
     }

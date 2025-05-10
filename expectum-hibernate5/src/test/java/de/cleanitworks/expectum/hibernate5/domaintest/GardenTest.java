@@ -1,10 +1,10 @@
-package de.cleanitworks.expectum.hibernate4.domaintest;
+package de.cleanitworks.expectum.hibernate5.domaintest;
 
 import de.cleanitworks.expectum.core.Java8Util;
-import de.cleanitworks.expectum.hibernate4.Hibernate5JsonResourceTest;
-import de.cleanitworks.expectum.hibernate4.domain.Bed;
-import de.cleanitworks.expectum.hibernate4.domain.Garden;
-import de.cleanitworks.expectum.hibernate4.domain.Plant;
+import de.cleanitworks.expectum.hibernate5.Hibernate5JsonResourceTest;
+import de.cleanitworks.expectum.hibernate5.domain.Bed;
+import de.cleanitworks.expectum.hibernate5.domain.Garden;
+import de.cleanitworks.expectum.hibernate5.domain.Plant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

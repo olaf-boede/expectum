@@ -27,9 +27,9 @@
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
 
-        <mapping class="de.cleanitworks.expectum.hibernate4.domain.Garden" />
-        <mapping class="de.cleanitworks.expectum.hibernate4.domain.Bed" />
-        <mapping class="de.cleanitworks.expectum.hibernate4.domain.Plant" />
+        <mapping class="de.cleanitworks.expectum.hibernate5.domain.Garden" />
+        <mapping class="de.cleanitworks.expectum.hibernate5.domain.Bed" />
+        <mapping class="de.cleanitworks.expectum.hibernate5.domain.Plant" />
 
     </session-factory>
 </hibernate-configuration>

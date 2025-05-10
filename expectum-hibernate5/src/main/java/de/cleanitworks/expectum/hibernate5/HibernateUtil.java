@@ -1,4 +1,4 @@
-package de.cleanitworks.expectum.hibernate4;
+package de.cleanitworks.expectum.hibernate5;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
