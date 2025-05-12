@@ -1,5 +1,5 @@
 {
-  "simpleMeadow": {
+  "gulfLawn": {
     expected: {
       name: Gulf meadow
       description: '''
@@ -7,21 +7,33 @@
         But not helpful for nature.'''
       created: 2020-07-01
       plants: [
-        { name: "Grass" }
+          {
+            latinName: Agrostis stolonifera INDEPENDENCE I
+            name: Weißes Straußgras (Zuchtform)
+          },
+          {
+            latinName: Festuca rubra commutata GREENMILE
+            name: Rotschwingel (Zuchtform)
+          }
       ]
     }
   },
-  simpleMeadow_hideDescriptionAndPlants: {
+  gulfLawn_hideDescriptionAndPlants: {
     expected: {
       name: Gulf meadow
       created: 2020-07-01
     }
   },
-  simpleMeadow_showOnlyPlants: {
+  gulfLawn_showOnlyPlants: {
     expected: {
       plants: [
         {
-          name: Grass
+          latinName: Agrostis stolonifera INDEPENDENCE I
+          name: Weißes Straußgras (Zuchtform)
+        },
+        {
+          latinName: Festuca rubra commutata GREENMILE
+          name: Rotschwingel (Zuchtform)
         }
       ]
     }

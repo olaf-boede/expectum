@@ -1,27 +1,60 @@
 {
-  "simpleMeadow": {
+  "gulfMeadow_usingToJsonAndJson": {
     "expected": {
       "name": "Gulf meadow",
       "description": "A green area.\nBut not helpful for nature.",
       "created": "2020-07-01",
       "plants": [
         {
-          "name": "Grass"
+          "latinName": "Agrostis stolonifera INDEPENDENCE I",
+          "name": "Weißes Straußgras (Zuchtform)"
+        },
+        {
+          "latinName": "Festuca rubra commutata GREENMILE",
+          "name": "Rotschwingel (Zuchtform)"
         }
       ]
     }
   },
-  "simpleMeadow_hideDescriptionAndPlants": {
+  "niceMeadow_usingAssertJsonNode": {
+    "expected": {
+      "name": "Wildflower meadow",
+      "description": "A beautiful place for people and animals.",
+      "created": "2020-07-01",
+      "plants": [
+        {
+          "latinName": "Festuca rubra",
+          "name": "Horst-Rotschwingel "
+        },
+        {
+          "latinName": "Poa angustifolia",
+          "name": "Schmalblättriges Rispengras"
+        },
+        {
+          "latinName": "Agrimonia eupatoria",
+          "name": "Kleiner Odermennig"
+        },
+        {
+          "latinName": "Centaurea jacea",
+          "name": "Wiesen-Flockenblume"
+        }
+      ]
+    }
+  },
+  "gulfMeadow_hideDescriptionAndPlants": {
     "expected": {
       "name": "Gulf meadow",
       "created": "2020-07-01"
     }
   },
-  "simpleMeadow_showOnlyPlants": {
+  "gulfMeadow_showOnlyLatinPlantNames": {
     "expected": {
       "plants": [
         {
-          "name": "Grass"
+          "latinName": "Agrostis stolonifera INDEPENDENCE I"
+        },
+        {
+          "latinName": "Festuca rubra commutata GREENMILE"
         }
       ]
     }
