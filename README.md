@@ -21,7 +21,7 @@ Dieses Vorgehen kann bei umfangreichen Ergebnisstrukturen zu sehr aufwändigem V
 Die Kosten zur Herstellung und Pflege solcher Verifikationen sind nicht gering.
 
 Oft ist deshalb bei klassischen Verifikationen zu beobachten, dass Entwickler nur eine kleine Teilmenge des Ergebnisses
-verifizieren, was zu erheblichen Testabdeckungslücken führen kann.
+prüfen, was zu erheblichen Testabdeckungslücken führen kann.
 
 ### Json basierte Verifikation mit <i>expectum</i>
 
@@ -61,6 +61,8 @@ werden.
 
 TODO: 
 * Beschreibung der von Testvererbung und Testkomposition.
+* Ein- und Ausblenden von Feldern
+* Tests von Hibernate Objekten und von deren Lazy Load Auflösung
 * Erläuterung der Beispiele
 
 ### Json Test Beispiel
