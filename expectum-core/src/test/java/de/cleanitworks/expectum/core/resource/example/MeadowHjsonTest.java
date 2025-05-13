@@ -6,8 +6,8 @@ import de.cleanitworks.expectum.core.resource.example.model.Plant;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static de.cleanitworks.expectum.core.Java8Util.listOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MeadowHjsonTest extends JsonResourceTest {
@@ -16,7 +16,7 @@ class MeadowHjsonTest extends JsonResourceTest {
             .name("Gulf meadow")
             .description("A green area.\nBut not helpful for nature.")
             .created(LocalDate.parse("2020-07-01"))
-            .plants(listOf(
+            .plants(List.of(
                     Plant.builder()
                             .latinName("Agrostis stolonifera INDEPENDENCE I")
                             .name("Weißes Straußgras (Zuchtform)").build(),

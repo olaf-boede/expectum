@@ -1,12 +1,13 @@
 package de.cleanitworks.expectum.hibernate5.domaintest;
 
-import de.cleanitworks.expectum.core.Java8Util;
 import de.cleanitworks.expectum.hibernate5.Hibernate5JsonResourceTest;
 import de.cleanitworks.expectum.hibernate5.domain.Bed;
 import de.cleanitworks.expectum.hibernate5.domain.Garden;
 import de.cleanitworks.expectum.hibernate5.domain.Plant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -113,9 +114,10 @@ class GardenTest extends Hibernate5JsonResourceTest {
     }
 
     Garden.GardenBuilder smallGarden() {
+
         return Garden.builder()
                // .id(6l)
-                .beds(Java8Util.listOf(
+                .beds(List.of(
                         Bed.builder()
                                 .name("Small bed")
                                 .numberOfPlants(10)

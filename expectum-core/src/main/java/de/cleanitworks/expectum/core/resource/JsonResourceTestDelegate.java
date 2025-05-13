@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.cfg.MutableConfigOverride;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.cleanitworks.expectum.core.Java8Util;
 import de.cleanitworks.expectum.core.junit.TestClassUtil;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class JsonResourceTestDelegate {
 
-  static final List<String> GETTER_PREFIXES = Java8Util.listOf("get", "is");
+  static final List<String> GETTER_PREFIXES = List.of("get", "is");
 
   /**
    * By default, each concrete test class uses a corresponding json test data file having a similar
@@ -211,7 +210,7 @@ public class JsonResourceTestDelegate {
    * @param propNames the properties to write on json serialization.
    */
   public void jsonShow(Class<?> cls, String... propNames) {
-    Set<String> propsToShow = Java8Util.setOf(propNames);
+    Set<String> propsToShow = Set.of(propNames);
     List<String> allProps = Stream.of(cls.getMethods())
             .filter(m -> m.getDeclaringClass() != Object.class)
             .map(JsonResourceTestDelegate::getterToPropertyName)

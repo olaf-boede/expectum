@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
-import static de.cleanitworks.expectum.core.Java8Util.listOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -185,7 +184,7 @@ class TestBean {
                 .id(7)
                 .string("string value")
                 .localDate(LocalDate.parse("2020-07-01"))
-                .itemList(listOf(TestItem.builder().name("item name").build()))
+                .itemList(List.of(TestItem.builder().name("item name").build()))
                 .build();
     }
 

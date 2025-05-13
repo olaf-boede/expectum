@@ -1,7 +1,5 @@
 package de.cleanitworks.expectum.core.junit;
 
-import de.cleanitworks.expectum.core.Java8Util;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +7,7 @@ import java.util.Set;
 
 public class TestClassUtil {
 
-  private static final Set<String> TEST_ANNOTATIONS = Java8Util.setOf(
+  private static final Set<String> TEST_ANNOTATIONS = Set.of(
           "org.junit.jupiter.api.Test",
           "org.junit.jupiter.api.RepeatedTest",
           "org.junit.jupiter.params.ParameterizedTest",
