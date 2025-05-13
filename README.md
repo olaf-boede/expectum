@@ -60,9 +60,10 @@ werden.
 ## Struktur dateibasierter Tests
 
 TODO: 
-* Beschreibung der von Testvererbung und Testkomposition.
+* Beschreibung von Testvererbung und Testkomposition.
 * Ein- und Ausblenden von Feldern
-* Tests von Hibernate Objekten und von deren Lazy Load Auflösung
+* Tests von Hibernate Objekten und deren Lazy Load Auflösung
+* XML Testung
 * Erläuterung der Beispiele
 
 ### Json Test Beispiel
