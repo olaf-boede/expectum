@@ -57,9 +57,28 @@ Es werden automatisch alle Felder verifiziert. Der Entwickler kann jedoch für d
 Zur die Verifikation mehrzeiliger Feldinhalte (z.B. XML) kann das in solchen Fällen besser lesbare Format hjson genutzt 
 werden. 
 
-## Struktur eines dateibasierten Tests
+## Struktur dateibasierter Tests
 
-TODO
+TODO: 
+* Beschreibung der von Testvererbung und Testkomposition.
+* Erläuterung der Beispiele
+
+### Json Test Beispiel
+
+[Java Code](https://github.com/olaf-boede/expectum/blob/main/expectum-core/src/test/java/de/cleanitworks/expectum/core/resource/example/MeadowJsonTest.java)<br>
+[Json Erwartungsdaten](https://github.com/olaf-boede/expectum/blob/main/expectum-core/src/test/java/de/cleanitworks/expectum/core/resource/example/MeadowJsonTest.json)
+
+### hJson Test Beispiel
+
+[Java Code](https://github.com/olaf-boede/expectum/blob/main/expectum-core/src/test/java/de/cleanitworks/expectum/core/resource/example/MeadowHjsonTest.java)<br>
+[hJson Erwartungsdaten](https://github.com/olaf-boede/expectum/blob/main/expectum-core/src/test/java/de/cleanitworks/expectum/core/resource/example/MeadowHjsonTest.hjson)
+
+### Hibernate Test (unter Berücksichtigung der Lazy Load Auflösung)
+
+[Java Code](https://github.com/olaf-boede/expectum/blob/main/expectum-hibernate/src/test/java/de/cleanitworks/expectum/hibernate/domaintest/GardenTest.java)<br>
+[Json Erwartungsdaten](https://github.com/olaf-boede/expectum/blob/main/expectum-hibernate/src/test/java/de/cleanitworks/expectum/hibernate/domaintest/GardenTest.json)
+
+
 
 
 
