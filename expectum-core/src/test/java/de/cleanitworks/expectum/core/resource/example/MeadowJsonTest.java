@@ -47,7 +47,11 @@ class MeadowJsonTest extends JsonResourceTest {
     }
 
     /**
-     * Does the same as the test above, but uses a shorter syntax.
+     * Does the same as the test above, but:
+     * <ul>
+     *     <li>uses a shorter syntax and</li>
+     *     <li>uses JSONassert to report differences field by field</li>
+     * </ul>
      */
     @Test
     void niceMeadow_usingAssertJsonNode() {

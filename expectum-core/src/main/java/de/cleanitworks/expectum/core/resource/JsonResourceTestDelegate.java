@@ -86,9 +86,9 @@ public class JsonResourceTestDelegate {
   }
 
   /**
-   * Serializes the given object to json.
+   * Serializes the given object to a json string.
    *
-   * This method can be used to compare the given object state against expected values within a json file.
+   * This method may be used to compare the given object state against expected json string.
    * E.g.
    * <pre>assertThat(toJson(myObj)).isEqualTo(json("myExpectedStateNode");</pre>
    *
@@ -125,11 +125,11 @@ public class JsonResourceTestDelegate {
    * Provides test data from a file having a name matching the class name. E.g. for a test
    * class XTest a corresponding file XTest.json within the test class package will be used.
    *
-   * <p>If the given nodePtr starts with a slash ('/') it will used as an absolute json pointer
+   * <p>If the given nodePtr starts with a slash ('/') it will be used as an absolute json pointer
    * (See: {@link com.fasterxml.jackson.core.JsonPointer}).
    *
    * <p>If there is no leading slash, a prefix having the name as the calling test method will be
-   * added automatically. +
+   * added automatically.
    *
    * <p>Example: If a test needs to read <code>jsonData("/myTestMethodName/someData")</code> it might
    * alternatively use <code>jsonData("someData")</code> to achieve the same result.
@@ -174,7 +174,7 @@ public class JsonResourceTestDelegate {
    * If that fails an additional JSONAssert compare operation is used to provide more details about the difference.
    *
    * @param bean the bean to verify.
-   * @param nodeInTestMethodJson the json-subnode containing the expected bean data.
+   * @param nodeInTestMethodJson the json sub node containing the expected bean data.
    */
   public void assertJsonNode(Object bean, String nodeInTestMethodJson) {
     String beanJson = toJson(bean);
